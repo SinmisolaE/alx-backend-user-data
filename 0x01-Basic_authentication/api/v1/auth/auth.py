@@ -9,7 +9,15 @@ class Auth:
     """ template for all authentication system"""
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """ first stage"""
-        return False
+        if path is None:
+            return True
+        if excluded_paths is None or excluded_paths == []:
+            return True
+        if path[-1] != '/':
+            new_path = path + '/'
+        if path in excluded_paths or new_path in excluded_paths:
+            return False
+        return True
 
     def authorization_header(self, request=None) -> str:
         """ aithorization header"""
