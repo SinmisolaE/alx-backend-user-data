@@ -8,7 +8,7 @@ from typing import List, TypeVar
 class Auth:
     """ template for all authentication system"""
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """ first stage"""
+        """ method should be slash tolerant"""
         if path is None:
             return True
         if excluded_paths is None or excluded_paths == []:
