@@ -60,6 +60,7 @@ class DB:
             try:
                 user = self.find_user_by(id=id)
                 setattr(user, k, v)
+                self._session.commit()
                 return None
             except InvalidRequestError or NoResultFound:
                 raise ValueError
