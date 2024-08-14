@@ -41,9 +41,9 @@ class DB:
             self._session.add(user)
             self._session.commit()
             return user
-        except Exception:
+        except Exception as e:
             self._session.rollback()
-            return None
+            raise e
 
     def find_user_by(self, **kwargs) -> User:
         """ takes in arbitrary keyword arguments
