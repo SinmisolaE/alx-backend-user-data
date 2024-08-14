@@ -54,12 +54,12 @@ class DB:
 
     def update_user(self, id: int, **kwargs) -> None:
         """ finds and updates a user"""
+        try:
+            user = self.find_user_by(id=id)
+        except NoResultFound:
+            raise ValueError
         for k, v in kwargs.items():
             if not hasattr(User, k):
                 raise ValueError
             setattr(user, k, v)
-        try:
-            user = self.find_user_by(id=id)
-            slf._session.commit()
-        except NoResultFound:
-            raise ValueError
+        self._session.commit()
