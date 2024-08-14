@@ -57,10 +57,9 @@ class DB:
         for k, v in kwargs.items():
             if not hasattr(User, k):
                 raise ValueError
-            try:
-                user = self.find_user_by(id=id)
-                setattr(user, k, v)
-                self._session.commit()
-                return None
-            except InvalidRequestError or NoResultFound:
-                raise ValueError
+        try:
+            user = self.find_user_by(id=id)
+            setattr(user, k, v)
+        except NoResultFound:
+            raise ValueError
+        self._session.commit()
