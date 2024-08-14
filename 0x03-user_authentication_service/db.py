@@ -34,7 +34,7 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(self, email: string, hashed_password: string) -> User:
+    def add_user(self, email: str, hashed_password: str) -> User:
         """ returns a User object """
         user = User(email=email, hashed_password=hashed_password)
         self._session.add(user)
@@ -53,7 +53,7 @@ class DB:
                     return user
             raise NoResultFound
 
-    def update_user(self, id, **kwargs) -> None:
+    def update_user(self, id: int, **kwargs) -> None:
         """ finds and updates a user"""
         for k, v in kwargs.items():
             if k not in User.__dict__:
