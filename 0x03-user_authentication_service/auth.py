@@ -15,6 +15,7 @@ def _hash_password(password: str) -> bytes:
     passwd = password.encode('utf-8')
     return bcrypt.hashpw(passwd, bcrypt.gensalt())
 
+
 class Auth:
     """Auth class to interact with the authentication database.
     """
@@ -34,4 +35,3 @@ class Auth:
             user = User(email=email, password=hash_password)
             self._db.add_user(user)
             return user
-            
