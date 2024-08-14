@@ -55,7 +55,7 @@ class DB:
     def update_user(self, id: int, **kwargs) -> None:
         """ finds and updates a user"""
         for k, v in kwargs.items():
-            if k not in User.__dict__:
+            if not hasattr(User, k):
                 raise ValueError
             try:
                 user = self.find_user_by(id=id)
