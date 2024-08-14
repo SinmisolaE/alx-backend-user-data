@@ -44,13 +44,11 @@ class DB:
     def find_user_by(self, **kwargs) -> User:
         """ takes in arbitrary keyword arguments
         returns the first row found in the users"""
-        all_users = self._session.query(User)
         for k, v in kwargs.items():
-            if k not in User.__dict__:
+            if not hasattr(User, k):
                 raise InvalidRequestError
-            for user in all_users:
-                if getattr(user, k) == v:
-                    return user
+            user = self._session.query(User).filter_by(**kwargs).first()
+            return user
         raise NoResultFound
 
     def update_user(self, id: int, **kwargs) -> None:
