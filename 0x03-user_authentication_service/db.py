@@ -59,7 +59,7 @@ class DB:
         except NoResultFound:
             raise ValueError()
         for k, v in kwargs.items():
-            if not hasattr(User, k):
+            if not hasattr(user, k):
                 raise ValueError
             else:
                 setattr(user, k, v)
