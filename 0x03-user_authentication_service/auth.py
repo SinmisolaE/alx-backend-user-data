@@ -64,7 +64,7 @@ class Auth:
         self._db.update_user(user.id, session_id=session_id)
         return session_id
 
-    def get_user_from_session_id(session_id: str) -> Union[None, User]:
+    def get_user_from_session_id(self, session_id: str) -> Union[None, User]:
         """ takes a single session_id string argument
         returns the corresponding User or None."""
         if session_id is None:
