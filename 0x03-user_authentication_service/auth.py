@@ -82,4 +82,3 @@ class Auth:
         except ValueError:
             return None
         return None
-
