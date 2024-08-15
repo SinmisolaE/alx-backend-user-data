@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 """ a basic Flask app"""
 
-from flask import Flask, jsonify, request, abort
+from flask import (
+    Flask,
+    jsonify,
+    request,
+    abort,
+    redirect,
+    url_for
+)
 from auth import Auth
 
 
@@ -43,6 +50,49 @@ def login():
     response = jsonify({"email": f"{email}", "message": "logged in"})
     response.set_cookie("session_id", session_id)
     return response
+
+
+@app.route("/profile", methods=["GET"], strict_slashes=False)
+def profile() -> str:
+    """
+    Return a user's email based on session_id in the received cookies
+    """
+    session_id = request.cookies.get("session_id")
+    user = AUTH.get_user_from_session_id(session_id)
+    if user:
+        return jsonify({"email": f"{user.email}"}), 200
+    abort(403)
+
+
+@app.route("/reset_password", methods=["POST"], strict_slashes=False)
+def get_reset_password_token() -> str:
+    """
+    Generate a token for resetting a user's password
+    """
+    email = request.form.get("email")
+    try:
+        reset_token = AUTH.get_reset_password_token(email)
+    except ValueError:
+        abort(403)
+
+    return jsonify({"email": f"{email}", "reset_token": f"{reset_token}"})
+
+
+@app.route("/reset_password", methods=["PUT"], strict_slashes=False)
+def update_password() -> str:
+    """
+    Update a user's password
+    """
+    email = request.form.get("email")
+    reset_token = request.form.get("reset_token")
+    new_password = request.form.get("new_password")
+
+    try:
+        AUTH.update_password(reset_token, new_password)
+    except ValueError:
+        abort(403)
+
+    return jsonify({"email": f"{email}", "message": "Password updated"})
 
 
 if __name__ == '__main__':
