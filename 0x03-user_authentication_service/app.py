@@ -27,5 +27,23 @@ def user():
     return jsonify({"email": f"{email}", "message": "user created"})
 
 
+@app.route('/users', methods=['POST'],strict_slashes=False)
+def login():
+    """ create a new session for the user
+    store it the session ID as a cookie with key "session_id"
+    on the response
+    return a JSON payload of the form
+    else use flask.abort
+    """
+    email = request.form.get("email")
+    password = request.form.get("password")
+    if not Auth.validate_login(email, password):
+        abort(401)
+    session_id = Auth.create_session(email)
+    response = jsonify({"email": f"{email}", "message": "logged in"})
+    response.set_cookie("session_id", session_id)
+    return response
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port="5000")
